@@ -72,26 +72,73 @@ Fitness_Females %>%
 
 Fitness_Females2 <- remove_sd_outlier(Fitness_Females,cols = "Body_Mass" ,n_sigmas = 3)
 
+
 Fitness_Females2 %>% 
-        ggplot(aes(Est_VO2_max))+
+        ggplot(aes(Body_Mass))+
         geom_histogram()
 
 Fitness_Males2 <- remove_sd_outlier(Fitness_Males,cols = "Body_Mass" ,n_sigmas = 3)
 
 Fitness_Males2 %>% 
-        ggplot(aes(Est_VO2_max))+
+        ggplot(aes(Body_Mass))+
+        geom_density()
+
+shapiro.test(Fitness_Males2$Body_Mass)
+
+shapiro.test(Fitness_Females2$Body_Mass)
+
+
+
+
+####################################################################################################
+### even after filtering 3sd data is not normally distributed
+### trying manual filtering
+
+summary(Fitness_Females)
+Fitness_Females3 <- Fitness_Females %>% 
+        na.omit() %>% 
+        filter(Body_Mass <= mean(Body_Mass)+(3*sd(Body_Mass))) %>% 
+        filter(Body_Mass >= mean(Body_Mass)-(3*sd(Body_Mass))) %>% 
+        filter(Stature <= mean(Stature) + (3*sd(Stature))) %>% 
+        filter(Stature >= mean(Stature) - (3*sd(Stature))) %>% 
+        filter(Est_VO2_max <= mean(Est_VO2_max) + (3*sd(Est_VO2_max))) %>% 
+        filter(Est_VO2_max >= mean(Est_VO2_max) - (3*sd(Est_VO2_max))) 
+
+summary(Fitness_Females3)
+
+Fitness_Males3 <- Fitness_Males %>% 
+        na.omit() %>% 
+        filter(Body_Mass <= mean(Body_Mass)+(3*sd(Body_Mass))) %>% 
+        filter(Body_Mass >= mean(Body_Mass)-(3*sd(Body_Mass))) %>% 
+        filter(Stature <= mean(Stature) + (3*sd(Stature))) %>% 
+        filter(Stature >= mean(Stature) - (3*sd(Stature))) %>% 
+        filter(Est_VO2_max <= mean(Est_VO2_max) + (3*sd(Est_VO2_max))) %>% 
+        filter(Est_VO2_max >= mean(Est_VO2_max) - (3*sd(Est_VO2_max))) 
+
+### visualize change
+
+Fitness_Females3 %>% 
+        ggplot(aes(Stature,Body_Mass)) +
+        geom_point()+
+        geom_smooth(method=lm)
+
+
+
+Fitness_Females %>% 
+        ggplot(aes(Stature))+
         geom_histogram()
 
+Fitness_Females3 %>% 
+        ggplot(aes(Stature))+
+        geom_density()
 
 
 
 
 
 
-summary(Fitness_Females) %>% 
-        print()
 
-Fitness_Males %>% 
+Fitness_Males2 %>% 
         ggplot(aes(Body_Mass,Stature))+
         geom_point()
 
