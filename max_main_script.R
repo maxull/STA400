@@ -70,7 +70,12 @@ Fitness_Females %>%
 ########################################################################################################
 ###### filter outliers >3sd      #######################################################################
 
-Fitness_Females2 <- remove_sd_outlier(Fitness_Females,cols = "Body_Mass" ,n_sigmas = 3)
+Fitness_Females2 <- Fitness_Females %>% 
+        na.omit() %>% 
+        remove_sd_outlier(n_sigmas = 3)
+        
+##### filtering worked
+
 
 
 Fitness_Females2 %>% 
