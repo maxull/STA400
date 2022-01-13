@@ -68,3 +68,49 @@ data %>%
 data %>% 
         ggplot(aes(Brutto_inntekt, BMI, fill = Brutto_inntekt))+
         geom_boxplot()
+
+
+###################################################################################
+#####################################################################################
+##################################################################################
+
+### oppgave 1.2
+
+### read data
+
+data6 <- read.spss("data/Datasett 6_Grand Slam Tennis.sav", to.data.frame = TRUE)
+
+
+### how many male and female players
+
+summary(data6)
+
+### female = 183
+### male = 193
+
+### % male and female
+
+183/(183+193)*100 #female
+193/(183+193)*100 #male
+
+typeof(data6$Quarter)
+
+data6 %>% 
+        ggplot(aes(Quarter, fill=Quarter))+
+        geom_bar()+
+        facet_wrap(~Gender)
+
+#### trying to use crosstable from spss as performed in the example solution
+        
+library(gmodels)
+        
+CrossTable(data6$Gender,data6$Quarter,prop.chisq = FALSE, format = "SPSS", digits = 1)
+
+### clean up the table
+
+CrossTable(data6$Gender,data6$Quarter,prop.chisq = FALSE, format = "SPSS", digits = 1, prop.r =)
+
+        
+        
+        
+        
