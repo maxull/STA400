@@ -2,7 +2,7 @@
 
 ### open datasett 7 and make new variables
 
-library(foreign); library(tidyverse); library(psych);
+library(foreign); library(tidyverse); library(psych);library(readxl)
 
 ### read spss file datasett 7
 
@@ -101,16 +101,53 @@ data6 %>%
         facet_wrap(~Gender)
 
 #### trying to use crosstable from spss as performed in the example solution
+####
+#### works
         
 library(gmodels)
         
-CrossTable(data6$Gender,data6$Quarter,prop.chisq = FALSE, format = "SPSS", digits = 1)
+CrossTable(data6$Gender,data6$Quarter,prop.chisq = FALSE, format = "SPSS", digits = 1) 
 
-### clean up the table
+data6 %>% 
+        select(Gender, Quarter) %>% 
+        tbl_summary(by=Gender) %>% 
+        add_overall()
 
-CrossTable(data6$Gender,data6$Quarter,prop.chisq = FALSE, format = "SPSS", digits = 1, prop.r =)
+#############################################################################
+###############################################################################
+##########################################################################
 
-        
-        
-        
-        
+### oppgave 1.3 
+
+### read datasett fitnesstests and combine data into one datasett
+
+data1m <- read_excel("data/Datasett 1_Fitnesstests.xls.xls", sheet = "Males") %>% 
+        print()
+
+data1f <- read_excel("data/Datasett 1_Fitnesstests.xls.xls", sheet = "Females") %>% 
+        print()
+
+data1m %>% 
+        mutate(Gender = as.character("Male")) %>% 
+        print()-> data1M
+
+data1F <- data1f %>% 
+        mutate(Gender = as.character("Female")) 
+
+
+data1 <- bind_rows(data1F,data1M) %>% 
+        print()
+
+### explore data means
+
+data1 %>% 
+        na.omit() %>% 
+        tbl_summary(by = "Gender",
+                    statistic = c(Stature, Body_Mass, Est_VO2_max) ~"{mean} ({sd})")
+
+data1 %>% 
+        select(Gender, Stature, Body_Mass, Est_VO2_max) %>% 
+        group_by(Gender) %>% 
+        summary()
+
+                

@@ -1,6 +1,6 @@
 ##### analysis of FYSAK datasett, Lesson 1
 
-library(foreign); library(tidyverse); library(psych); library(cowplot)
+library(foreign); library(tidyverse); library(psych); library(cowplot); library(gtsummary)
 
 ### read SPSS file, .sav filetype
 ### library(foreign), must use argument "to.data.frame = TRUE" otherwise you get the data variables page
@@ -22,6 +22,18 @@ Fysak2 %>%
 Fysak2 %>% 
         mutate(old = as.factor(if_else(age<= 59, 1,0))) %>% 
         summary()
+
+
+#### participant smmary table
+
+Fysak2 %>% 
+  select(-ID) %>% 
+  tbl_summary(by = Kjønn,
+              statistic = c(age,Steps_daily) ~"{mean}({sd})",
+              missing = "no") %>% 
+  add_overall()
+
+
 
 ### manually calculate %
 ### <=59 = 1806, >=60 = 1597
