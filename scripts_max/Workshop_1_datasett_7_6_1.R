@@ -104,7 +104,7 @@ data6 %>%
 ####
 #### works
         
-library(gmodels)
+library(gtsummary)
         
 CrossTable(data6$Gender,data6$Quarter,prop.chisq = FALSE, format = "SPSS", digits = 1) 
 
