@@ -97,7 +97,7 @@ shapiro.test(Fitness_Females2$Body_Mass)
 
 ####################################################################################################
 ### even after filtering 3sd data is not normally distributed
-### trying manual filtering
+### trying manual filtering --- The filtering function obove worked!!!
 
 summary(Fitness_Females)
 Fitness_Females3 <- Fitness_Females %>% 

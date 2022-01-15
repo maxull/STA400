@@ -104,7 +104,7 @@ data6 %>%
 ####
 #### works
         
-library(gtsummary)
+library(gtsummary); library(gmodels)
         
 CrossTable(data6$Gender,data6$Quarter,prop.chisq = FALSE, format = "SPSS", digits = 1) 
 
@@ -146,8 +146,91 @@ data1 %>%
                     statistic = c(Stature, Body_Mass, Est_VO2_max) ~"{mean} ({sd})")
 
 data1 %>% 
-        select(Gender, Stature, Body_Mass, Est_VO2_max) %>% 
-        group_by(Gender) %>% 
+        filter(Gender == "Female") %>%  
         summary()
 
-                
+data1 %>% 
+        filter(Gender == "Male") %>%  
+        summary()
+
+describeBy(data1, data1$Gender)
+
+### explore data visually
+
+data1 %>% 
+        ggplot(aes(Stature, fill = Gender))+
+        geom_density()+
+        facet_wrap(~Gender)
+
+data1 %>% 
+        ggplot(aes(Body_Mass, fill = Gender))+
+        geom_density()+
+        facet_wrap(~Gender)
+
+data1 %>% 
+        ggplot(aes(Est_VO2_max, fill = Gender))+
+        geom_density()+
+        facet_wrap(~Gender)
+
+data1 %>% 
+        ggplot(aes(Stature, Body_Mass, group = Gender, fill = Gender))+
+        geom_point()+
+        geom_smooth(method=lm)+
+        facet_wrap(~Gender)
+
+### we have som extreme values, try to filter and reanalyse
+### remove 3sd values
+
+library(dataPreparation)
+
+data1_filtered <- data1 %>% 
+        na.omit() %>% 
+        remove_sd_outlier(n_sigmas = 3)
+
+describeBy(data1_filtered, data1_filtered$Gender)
+
+data1_filtered %>% 
+        ggplot(aes(Stature, Body_Mass, fill = Gender,))+
+        geom_point()+
+        geom_smooth(method=lm)+
+        facet_wrap(~Gender)
+
+data1_filtered %>% 
+        ggplot(aes(Stature, fill = Gender))+
+        geom_density()+
+        facet_wrap(~Gender)
+
+data1_filtered %>% 
+        ggplot(aes(Body_Mass, fill = Gender))+
+        geom_density()+
+        facet_wrap(~Gender)
+
+data1_filtered %>% 
+        ggplot(aes(Est_VO2_max, fill = Gender))+
+        geom_density()+
+        facet_wrap(~Gender)
+
+
+### compare table output of filtered and unfiltered data
+
+tbl_1 <- data1 %>% 
+        tbl_summary(by = "Gender",
+                    statistic = c(Stature, Body_Mass, Est_VO2_max) ~"{mean} ({sd})", 
+                    digits = ~2)
+
+tbl_2 <- data1_filtered %>% 
+        tbl_summary(by = "Gender",
+                    statistic = c(Stature, Body_Mass, Est_VO2_max) ~"{mean} ({sd})", 
+                    digits = ~ 2)
+
+tbl_merge(list(tbl_1,tbl_2),
+          tab_spanner = c("Raw data", "Filtered for >3SD"))
+
+### means are quite similar, while SD are much lower after filtering out extreme values
+###
+### in this case i think i would use parametric and non-parametric tests, and report if
+### the tests return differing results
+
+
+
+
