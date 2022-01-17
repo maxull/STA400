@@ -240,7 +240,7 @@ tbl_merge(list(tbl_1,tbl_2),
 ### test of difference between groups (gender)
 ### parametric and non-parametric to determine if different
 
-### check variance to determine t.test
+### check variance to determine best test of difference between independent groups
 
 
 var(data1$Stature[data1$Gender == "Male"])
