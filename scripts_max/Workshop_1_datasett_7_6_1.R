@@ -216,12 +216,16 @@ data1_filtered %>%
 tbl_1 <- data1 %>% 
         tbl_summary(by = "Gender",
                     statistic = c(Stature, Body_Mass, Est_VO2_max) ~"{mean} ({sd})", 
-                    digits = ~2)
+                    digits = ~2) %>% 
+        add_p(vars = TRUE) %>% 
+        add_ci()
 
 tbl_2 <- data1_filtered %>% 
         tbl_summary(by = "Gender",
                     statistic = c(Stature, Body_Mass, Est_VO2_max) ~"{mean} ({sd})", 
-                    digits = ~ 2)
+                    digits = ~ 2) %>% 
+        add_p(vars=TRUE) %>% 
+        add_ci()
 
 tbl_merge(list(tbl_1,tbl_2),
           tab_spanner = c("Raw data", "Filtered for >3SD"))
@@ -230,6 +234,43 @@ tbl_merge(list(tbl_1,tbl_2),
 ###
 ### in this case i think i would use parametric and non-parametric tests, and report if
 ### the tests return differing results
+
+### my own tests
+
+### test of difference between groups (gender)
+### parametric and non-parametric to determine if different
+
+### check variance to determine t.test
+
+
+var(data1$Stature[data1$Gender == "Male"])
+var(data1$Stature[data1$Gender == "Female"], na.rm = TRUE)
+
+var(data1$Body_Mass[data1$Gender == "Male"])
+var(data1$Body_Mass[data1$Gender == "Female"])
+
+var(data1$Est_VO2_max[data1$Gender == "Male"])
+var(data1$Est_VO2_max[data1$Gender == "Female"])
+
+### all variances are differente -> t.test must assume unequal variances = Welch's t-test
+
+t.test(data1$Stature~data1$Gender)
+
+t.test(data1$Stature~data1$Gender)
+
+t.test(data1$Est_VO2_max~data1$Gender)
+
+t.test(data1_filtered$Stature~data1_filtered$Gender)
+
+t.test(data1$Stature~data1$Gender)
+
+t.test(data1$Est_VO2_max~data1$Gender)
+
+
+
+
+
+
 
 
 
