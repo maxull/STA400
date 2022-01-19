@@ -134,4 +134,82 @@ data8 %>%
 #################################################################################
 #############################################################################
 ### 2.2 t-test for independent groups
+data13 <- read.spss("data/Datasett 13 FYSAK (2).sav", to.data.frame = TRUE)
 
+### 2.2 a) I en tverrsnitt-studie har du rekruttert 3480 deltakere og målt hvor mange minutter 
+#   de bruker stillesittende (stå, sitte eller ligge) med et akselerometer. Du har også 
+#   spurt dem om de har hatt astma og om de har eller har hatt kreft. Formuler 
+#   hypotese (-r) og bestem uavhengige og avhengig (-e) variabler.
+
+### H1.1: Personer uten astma beveger seg mere enn personer med astma
+### H0.1: personer uten astma beveger seg like mye som personer med astma
+
+### H1.2: Personer med kreft beveger seg mindre enn personer uten kreft
+### H0.2: Det er ingen forskjell i aktivitet mellom kreft og tidligere kreft pasienter og friske
+
+### b) test hypotesene
+
+### sjekke normalfordeling av variablene
+
+data13 %>% 
+        ggplot(aes(Steps_daily, fill = ASTMA))+
+        geom_density()+
+        facet_wrap(~ASTMA)
+# density distirbution looks normal
+
+data13 %>% 
+        ggplot(aes(sample=Steps_daily, fill = ASTMA))+
+        geom_qq()+
+        geom_qq_line()+
+        facet_wrap(~ASTMA)
+# QQ looks ok
+
+describeBy(data13$Steps_daily, group = data13$ASTMA)
+describeBy(data13$Steps_daily, group = data13$KREFT)
+
+# skew and kurtosis looks ok
+# means and medians are quite close
+
+# many N therefore i use kolmogorov smirnov normality test
+
+data13na <- data13 %>% 
+        select(ASTMA,KREFT,Steps_daily) %>% 
+        na.omit()
+
+ks.test(data13na$ASTMA, data13na$Steps_daily)
+ks.test(data13na$KREFT, data13na$Steps_daily)
+# not normal
+
+### i like the distribution, even though KS.test is not normal
+
+### checking variance
+
+leveneTest(Steps_daily~ASTMA, data = data13, center= mean)    #non-significant p value -> equal variance
+leveneTest(Steps_daily~KREFT, data = data13, center= mean)    #non-significant p value -> equal variance
+
+# equal variance
+
+### equal variance + normal distribution -> students t-test
+
+t.test(data13na$Steps_daily~data13na$ASTMA, var.equal=TRUE)
+t.test(data13$Steps_daily~data13$KREFT, var.equal=TRUE)
+
+### create table
+
+tbl1 <- data13 %>% 
+        select(ASTMA,Steps_daily) %>% 
+        tbl_summary(by = ASTMA,
+                    statistic = c(Steps_daily) ~"{mean} ({sd})", 
+                    digits = ~ 2) %>% 
+        add_p(Steps_daily~"t.test", test.args = Steps_daily~list(var.equal = TRUE)) %>% 
+        add_ci()
+
+tbl2 <- data13 %>% 
+        select(KREFT,Steps_daily) %>% 
+        tbl_summary(by = KREFT,
+                    statistic = c(Steps_daily) ~"{mean} ({sd})", 
+                    digits = ~ 2) %>% 
+        add_p(Steps_daily~"t.test", test.args = Steps_daily~list(var.equal = TRUE)) %>% 
+        add_ci()
+
+tbl_merge(list(tbl1,tbl2))
