@@ -93,27 +93,35 @@ data8 %>%
 
 ### normally distributed
 
+shapiro.test(data8$sum_diff)    #violates normality assumtion
+shapiro.test(data8$s20m_diff)   #normal
+shapiro.test(data8$vj_diff)     #normal
+
 ##############################################################
 #########################################################################
 ### 2.1 b)
+library(car) #levines test
+
+leveneTest(s20m_diff~group, data = data8, center = mean) #non-significant p value -> equal variance
+leveneTest(vj_diff~group, data = data8, center= mean)    #non-significant p value -> equal variance
+
+### equal variance means i can use students t-test
 
 data8 %>% 
         select(group,s20m_diff,vj_diff) %>% 
         tbl_summary(by = group,
                     statistic = c(s20m_diff,vj_diff) ~"{mean} ({sd})", 
                     digits = ~ 2) %>% 
-        add_p() %>% 
+        add_p(~"t.test", var.equal = TRUE) %>% 
         add_ci()
-        ### p_value = wilcox.test script lower down
+        ### issues with determining the t.test method
 
-t.test(data8$s20m_diff~data8$group)
-t.test(data8$vj_diff~data8$group)
+### manual  t-test parametric with equal variance between groups -> student's t-test
 
-wilcox.test(s20m_diff ~group, data = data8, exact = FALSE)
-wilcox.test(vj_diff ~group, data = data8, exact = FALSE)
+t.test(data8$s20m_diff~data8$group, var.equal = TRUE)
+t.test(data8$vj_diff~data8$group, var.equal = TRUE)
 
-
-
+###visualize
 
 data8 %>% 
         ggplot(aes(group,s20m_diff, fill = group))+
@@ -121,3 +129,9 @@ data8 %>%
 data8 %>% 
         ggplot(aes(group,vj_diff, fill = group))+
         geom_boxplot()
+
+
+#################################################################################
+#############################################################################
+### 2.2 t-test for independent groups
+
