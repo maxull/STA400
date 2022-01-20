@@ -152,23 +152,35 @@ data13 <- read.spss("data/Datasett 13 FYSAK (2).sav", to.data.frame = TRUE)
 ### sjekke normalfordeling av variablene
 
 data13 %>% 
-        ggplot(aes(Steps_daily, fill = ASTMA))+
+        ggplot(aes(Stillesitting, fill = ASTMA))+
         geom_density()+
         facet_wrap(~ASTMA)
-# density distirbution looks normal
 
 data13 %>% 
-        ggplot(aes(sample=Steps_daily, fill = ASTMA))+
+        ggplot(aes(Stillesitting, fill = KREFT))+
+        geom_density()+
+        facet_wrap(~KREFT)
+
+# density distribution looks normal
+
+data13 %>% 
+        ggplot(aes(sample=Stillesitting, fill = ASTMA))+
         geom_qq()+
         geom_qq_line()+
         facet_wrap(~ASTMA)
+
+data13 %>% 
+        ggplot(aes(sample=Stillesitting, fill = KREFT))+
+        geom_qq()+
+        geom_qq_line()+
+        facet_wrap(~KREFT)
 # QQ looks ok
 
-describeBy(data13$Steps_daily, group = data13$ASTMA)
-describeBy(data13$Steps_daily, group = data13$KREFT)
+describeBy(data13$Stillesitting, group = data13$ASTMA)
+describeBy(data13$Stillesitting, group = data13$KREFT)
 
 # skew and kurtosis looks ok
-# means and medians are quite close
+# means and medians are close
 
 # many N therefore i use kolmogorov smirnov normality test
 
@@ -176,40 +188,45 @@ data13na <- data13 %>%
         select(ASTMA,KREFT,Steps_daily) %>% 
         na.omit()
 
-ks.test(data13na$ASTMA, data13na$Steps_daily)
-ks.test(data13na$KREFT, data13na$Steps_daily)
+ks.test(data13$ASTMA, data13$Stillesitting)
+ks.test(data13$KREFT, data13$Stillesitting)
 # not normal
 
 ### i like the distribution, even though KS.test is not normal
 
 ### checking variance
 
-leveneTest(Steps_daily~ASTMA, data = data13, center= mean)    #non-significant p value -> equal variance
-leveneTest(Steps_daily~KREFT, data = data13, center= mean)    #non-significant p value -> equal variance
+leveneTest(Stillesitting~ASTMA, data = data13, center= mean)    #non-significant p value -> equal variance
+leveneTest(Stillesitting~KREFT, data = data13, center= mean)    #non-significant p value -> equal variance
 
+leveneTest(data13$Stillesitting~data13$ASTMA, center = mean)    # alternatice script
 # equal variance
 
 ### equal variance + normal distribution -> students t-test
 
-t.test(data13na$Steps_daily~data13na$ASTMA, var.equal=TRUE)
-t.test(data13$Steps_daily~data13$KREFT, var.equal=TRUE)
+t.test(data13$Stillesitting~data13$ASTMA, var.equal=TRUE)
+t.test(data13$Stillesitting~data13$KREFT, var.equal=TRUE)
+
+### no difference between asmatics p-value = 0.1154
+### difference between canser with or with previous cancer p-value = 0.03532
 
 ### create table
 
 tbl1 <- data13 %>% 
-        select(ASTMA,Steps_daily) %>% 
+        select(ASTMA,Stillesitting) %>% 
         tbl_summary(by = ASTMA,
-                    statistic = c(Steps_daily) ~"{mean} ({sd})", 
+                    statistic = c(Stillesitting) ~"{mean} ({sd})", 
                     digits = ~ 2) %>% 
-        add_p(Steps_daily~"t.test", test.args = Steps_daily~list(var.equal = TRUE)) %>% 
+        add_p(Stillesitting~"t.test", test.args = Stillesitting~list(var.equal = TRUE)) %>% 
         add_ci()
 
 tbl2 <- data13 %>% 
-        select(KREFT,Steps_daily) %>% 
+        select(KREFT,Stillesitting) %>% 
         tbl_summary(by = KREFT,
-                    statistic = c(Steps_daily) ~"{mean} ({sd})", 
+                    statistic = c(Stillesitting) ~"{mean} ({sd})", 
                     digits = ~ 2) %>% 
-        add_p(Steps_daily~"t.test", test.args = Steps_daily~list(var.equal = TRUE)) %>% 
+        add_p(Stillesitting~"t.test", test.args = Stillesitting~list(var.equal = TRUE)) %>% 
         add_ci()
 
-tbl_merge(list(tbl1,tbl2))
+tbl_merge(list(tbl1,tbl2),
+          tab_spanner = c("ASTMA", "CANCER"))
