@@ -1,6 +1,6 @@
 library(foreign); library(tidyverse); library(psych);library(readxl);library(gtsummary); library(gmodels)
 
-tabel2 <- read_excel("data/Book1.xlsx, col_names = TRUE) %>% 
+tabel2 <- read_excel("data/Book1.xlsx", col_names = TRUE) %>% 
         print()
 
 
