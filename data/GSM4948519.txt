@@ -1,0 +1,66 @@
+^SAMPLE = GSM4948519
+!Sample_title = methylation_participant 1_Change of Direction (COD)_Baseline
+!Sample_geo_accession = GSM4948519
+!Sample_status = Public on Jan 21 2021
+!Sample_submission_date = Nov 27 2020
+!Sample_last_update_date = Jan 21 2021
+!Sample_type = genomic
+!Sample_channel_count = 1
+!Sample_source_name_ch1 = DNA from Vastus Lateralis Muscle_Participant 1_Change of Direction (COD)_Baseline
+!Sample_organism_ch1 = Homo sapiens
+!Sample_taxid_ch1 = 9606
+!Sample_characteristics_ch1 = gender: Male
+!Sample_characteristics_ch1 = tissue: Skeletal Muscle_Vastus Lateralis
+!Sample_characteristics_ch1 = timepoint: Baseline_rested pre exercise
+!Sample_characteristics_ch1 = health status: Young Healthy Adult
+!Sample_characteristics_ch1 = experimental condition: Change of Direction (COD) Running Exercise
+!Sample_molecule_ch1 = genomic DNA
+!Sample_extract_protocol_ch1 = Genomic DNA was extracted via the Qiagen DNA Easy Kit in accordance with  manufacturers guidelines. T
+!Sample_label_ch1 = biotin
+!Sample_label_protocol_ch1 = The DNA was then bisulfite converted using the EZ DNA Methylation Kit, Zymo Research, CA, United States, as per manufacturer’s instructions.
+!Sample_hyb_protocol = Bisulfite converted DNA was amplified, fragmented and hybridised to Illumina Infinium Human MethylationEPIC Beadchip using standard Illumina protocol
+!Sample_scan_protocol = Arrays were imaged using BeadArray Reader using Infinium Methylation NXT setting
+!Sample_description = 203265020027_R01C01_green
+!Sample_description = 203265020027_R01C01_red
+!Sample_data_processing = Partek Genomic Suite V7 (Using MethylationEPIC_v-1-0_B4 manifest file)
+!Sample_data_processing = Data is normalised via functional normalisation (with noob background correction)
+!Sample_platform_id = GPL21145
+!Sample_contact_name = Adam,P,Sharples
+!Sample_contact_email = a.p.sharples@googlemail.com
+!Sample_contact_phone = +447812732670
+!Sample_contact_laboratory = Dr Adam P Sharples
+!Sample_contact_department = Institute for Physical Performance
+!Sample_contact_institute = Norwegian School of Sport Sciences
+!Sample_contact_address = 220 Sognsveien
+!Sample_contact_city = Oslo
+!Sample_contact_zip/postal_code = 0863
+!Sample_contact_country = Norway
+!Sample_supplementary_file = NONE
+!Sample_series_id = GSE162288
+!Sample_data_row_count = 863722
+#ID_REF = 
+#VALUE = normalized signal
+#203265020027_R01C01 Detection Pval = 
+!sample_table_begin
+ID_REF	VALUE	203265020027_R01C01 Detection Pval
+cg09835024	0.0358114	0
+cg14361672	0.64516	0
+cg12950382	0.802501	0
+cg02115394	0.0757606	0
+cg12480843	0.0255717	0
+cg26724186	0.947893	0
+cg00617867	0.877211	0
+cg13773083	0.245051	0
+cg17236668	0.958685	0
+cg19607165	0.062829	0
+cg08770523	0.0236367	0
+cg24040570	0.024519	0
+cg24652288	0.609546	0
+cg09387925	0.021006	0
+cg01675618	0.0327026	0
+cg11947782	0.974436	0
+cg11945228	0.0164701	0
+cg21650422	0.0216924	0
+cg08360726	0.468244	0
+cg05738196	0.0572062	0
+!sample_table_end
