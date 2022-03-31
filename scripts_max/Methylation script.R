@@ -7,29 +7,31 @@
 if (!require("BiocManager", quietly = TRUE))
         install.packages("BiocManager")
 
-BiocManager::install("minfi")
+if (!require("BiocManager", quietly = TRUE))
+        install.packages("BiocManager")
+
+BiocManager::install("ChAMP")
+
+library("ChAMP")
+
+
+### if champ download did not work, start downloading single packages that are 
+### identified as "no package called " .... "
 
 if (!require("BiocManager", quietly = TRUE))
         install.packages("BiocManager")
 
-BiocManager::install("ChAMP", force = TRUE)
-
-library("ChAMP")
-
-if (!requireNamespace("BiocManager", quietly=TRUE))
-        install.packages("BiocManager")
-BiocManager::install(c("minfi","ChAMPdata","Illumina450ProbeVariants.db",
-                       "sva","IlluminaHumanMethylation450kmanifest","limma",
-                       "RPMM","DNAcopy","preprocessCore","impute","marray",
-                       "wateRmelon","goseq","plyr","GenomicRanges","RefFreeEWAS",
-                       "qvalue","isva","doParallel","bumphunter","quadprog","shiny",
-                       "shinythemes","plotly","RColorBrewer","DMRcate","dendextend",
-                       "IlluminaHumanMethylationEPICmanifest","FEM","matrixStats","missMethyl","combinat", force = "TRUE"))
-
-BiocManager::install("YourErrorPackage")
-
-myLoad <- ChAMP::Champ.load("data/GSM4948519.txt", arraytype = "EPIC")
-
-BiocManager::install("locfit")
-
 BiocManager::install("DMRcate")
+
+BiocManager::install("IlluminaHumanMethylation450kanno.ilmn12.hg19")
+BiocManager::install("org.Hs.eg.db")
+BiocManager::install("minfi")
+BiocManager::install("GO.db")
+BiocManager::install("geneLenDataBase")
+
+warnings()
+
+### seemes like ChAMP is installed
+### test on included dataset to se if it works
+
+
