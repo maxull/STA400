@@ -59,10 +59,7 @@ CpG.GUI()
 
 QC.GUI()
 
-<<<<<<< HEAD
 ### normalize data, chose nethod "SWAN" or functional normalization
-=======
-### normalize dat, chose nethod "SWAN" or functional normalization
 ### BMIQ is the standard normalization method
 ### to plot BQIM: myNorm <- champ.norm(plotBMIQ=TRUE)
 ### this wil save PDF of density curves
@@ -71,9 +68,7 @@ myNorm <- champ.norm(beta = myLoad$beta,
                      rgSet = myLoad2$rgSet,
                      method ="FunctionalNormalization")                  #### find out how to chose functional
 
->>>>>>> 6ba0312 (meth)
 
-myNorm <- champ.norm()                  #### find out how to chose functional
 
 champ.SVD()                             #### not sure what this does "singular value decomposition"
 
