@@ -14,7 +14,7 @@ if (!require("BiocManager", quietly = TRUE))
 
 BiocManager::install("ChAMP")
 
-library("ChAMP")
+library("ChAMP"); library(RColorBrewer); library(limma)
 
 
 ### if champ download did not work, start downloading single packages that are 
@@ -39,16 +39,16 @@ warnings()
 ### https://bioconductor.org/packages/devel/bioc/vignettes/ChAMP/inst/doc/ChAMP.html
 
 
-testDir=system.file("extdata", package = "ChAMPdata") %>% 
-        myLoad<- champ.load(testDir, arraytype = "450k")
+testDir=system.file("extdata", package = "ChAMPdata")
 
 myLoad <- champ.load(testDir,arraytype = "450k")
+myLoad2 <- champ.load(testDir, arraytype = "450K", method = "minfi")
 
 ### show warnings
 
 warnings()
 
-### dont understand, but maybe not an issue
+
 
 ### next step in pipeline: champ.qc
 ### quality control and initial visualization
@@ -70,7 +70,7 @@ myNorm <- champ.norm(beta = myLoad$beta,
 
 
 
-champ.SVD()                             #### not sure what this does "singular value decomposition"
+champ.SVD()                             #### not sure what this does "singular value decomposition", batch effects
 
 ### identify differentially methylated positions
 
@@ -87,3 +87,177 @@ myDMR <- champ.DMR()
 ### visualize DMR
 
 DMR.GUI()
+
+
+#######################################################
+#########################################################
+### single function methylation analysis: champ.process
+
+champ.process(directory = testDir,
+              )
+### champ.EpiMod did not work, try to bypass
+
+#################################################################
+######################################################
+#########################################################
+### Oshlack work flow:
+
+# sample sheet
+targets <- read.metharray.sheet(testDir)
+
+# raw data
+
+rgSet <- read.metharray.exp(targets = targets)
+# rgSet2 <- myLoad2$rgSet # does the same as above
+
+targets$ID <- paste(targets$Sample_Group,targets$Sample_Name,sep=".")
+sampleNames(rgSet) <- targets$ID
+
+detP <- detectionP(rgSet)
+
+# visualize barchart of detP means
+
+pal <- brewer.pal(8,"Dark2")
+par(mfrow=c(1,2))
+barplot(colMeans(detP), col=pal[factor(targets$Sample_Group)], las=2, 
+        cex.names=0.8, ylab="Mean detection p-values")
+abline(h=0.05,col="red")
+legend("topright", legend=levels(factor(targets$Sample_Group)), fill=pal,
+       bg="white")
+
+# center y lab on bar chart
+
+barplot(colMeans(detP), col=pal[factor(targets$Sample_Group)], las=2, 
+        cex.names=0.8, ylim=c(0,0.002), ylab="Mean detection p-values")
+abline(h=0.05,col="red")
+legend("topright", legend=levels(factor(targets$Sample_Group)), fill=pal, 
+       bg="white")
+
+# qc rapport
+
+qcReport(rgSet, sampNames=targets$ID, sampGroups=targets$Sample_Group, 
+         pdf="Oshlack_workflow/qcReport.pdf")
+
+#######################
+# filtering samples(this will filter entire samples with high means)
+
+keep <- colMeans(detP) < 0.05
+rgSet <- rgSet[,keep]
+
+# remove bad samples based on targets data
+
+targets <- targets[keep,]
+targets[,1:5]
+
+# remove bad samples based on detP means
+detP <- detP[,keep]
+dim(detP)
+
+######################
+# normalization
+
+mSetSq <- preprocessQuantile(rgSet)             ### dont know the nomrlaization methiod in Oshlack workflow
+mSetSq2 <- preprocessFunnorm(rgSet)             ### functional normalization
+
+# visualize before and after normalization
+
+mSetRaw <- preprocessRaw(rgSet)
+
+par(mfrow=c(1,2))
+densityPlot(rgSet, sampGroups=targets$Sample_Group,main="Raw", legend=FALSE)
+legend("top", legend = levels(factor(targets$Sample_Group)), 
+       text.col=brewer.pal(8,"Dark2"))
+densityPlot(getBeta(mSetSq), sampGroups=targets$Sample_Group,
+            main="Normalized", legend=FALSE)
+legend("top", legend = levels(factor(targets$Sample_Group)), 
+       text.col=brewer.pal(8,"Dark2"))
+
+# functional normalization vs. quantile from Oshlack workflow
+
+myNorm <- champ.norm(beta = myLoad$beta,
+                     rgSet = myLoad2$rgSet,
+                     method ="FunctionalNormalization")
+
+# visualize difference
+
+par(mfrow=c(2,1))
+
+densityPlot(myNorm, main = "Functional",sampGroups=targets$Sample_Group  ,pal = brewer.pal(8, "Dark2"))
+
+densityPlot(getBeta(mSetSq), sampGroups=targets$Sample_Group,
+            main="Normalized", legend=TRUE)
+
+
+###########################
+### multi dimensional scaling
+
+dev.off()    ### to reset plots viewer to default settings
+
+plotMDS(getM(mSetSq2), top=1000, gene.selection="common",
+        col=pal[factor(targets$Sample_Group)])
+
+### principal component visualization to identify where largest differences lie
+
+par(mfrow = c(3,2))
+plotMDS(getM(mSetSq), top=1000, gene.selection="common", 
+        col=pal[factor(targets$Sample_Group)], dim=c(1,2))
+
+plotMDS(getM(mSetSq), top=1000, gene.selection="common", 
+        col=pal[factor(targets$Sample_Group)], dim=c(1,3))
+
+plotMDS(getM(mSetSq), top=1000, gene.selection="common", 
+        col=pal[factor(targets$Sample_Group)], dim=c(1,4))
+
+plotMDS(getM(mSetSq), top=1000, gene.selection="common", 
+        col=pal[factor(targets$Sample_Group)], dim=c(2,3))
+
+plotMDS(getM(mSetSq), top=1000, gene.selection="common", 
+        col=pal[factor(targets$Sample_Group)], dim=c(2,4))
+
+plotMDS(getM(mSetSq), top=1000, gene.selection="common", 
+        col=pal[factor(targets$Sample_Group)], dim=c(3,4))
+legend("topright", legend=levels(factor(targets$Sample_Group)), text.col=pal,
+       cex=0.7, bg="white")
+
+
+############################################
+### filtering (using the functionally normlaized data)
+
+detP <- detP[match(featureNames(mSetSq2), rownames(detP))]
+
+# filter p-values < 0.0
+
+keep <- rowSums(detP < 0.01) == ncol(mSetSq2) # does not work
+table(keep)
+
+
+mVals <- getM(mSetSq2)
+bVals <- getBeta(mSetSq2)
+
+par(mfrow=c(2,1))
+
+densityPlot(mVals, main = "m-values",sampGroups=targets$Sample_Group  ,pal = brewer.pal(8, "Dark2"), xlab = "mVals")
+densityPlot(bVals, main = "B-values",sampGroups=targets$Sample_Group  ,pal = brewer.pal(8, "Dark2"),xlab = "bVals")
+
+colMeans(mVals)
+colMeans(bVals)
+
+meth <- myImport$Meth
+unmeth <- myImport$UnMeth
+
+colMeans(meth)
+colMeans(unmeth)
+
+
+
+
+
+# chacking unnormalized detP values to check for invalid samples
+
+detP <- myImport$detP
+
+barplot(colMeans(detP))
+colMeans(detP)
+summary(detP)
+
+rgSet2 <- myLoad2$rgSet
