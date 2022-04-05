@@ -14,7 +14,7 @@ if (!require("BiocManager", quietly = TRUE))
 
 BiocManager::install("ChAMP")
 
-library("ChAMP"); library(RColorBrewer); library(limma)
+library("ChAMP"); library(RColorBrewer); library(limma); library(maxprobes)
 
 
 ### if champ download did not work, start downloading single packages that are 
@@ -30,6 +30,8 @@ BiocManager::install("org.Hs.eg.db")
 BiocManager::install("minfi")
 BiocManager::install("GO.db")
 BiocManager::install("geneLenDataBase")
+BiocManager::install("minfiData")
+devtools::install_github("markgene/maxprobes")
 
 warnings()
 
@@ -163,13 +165,13 @@ mSetSq2 <- preprocessFunnorm(rgSet)             ### functional normalization
 
 mSetRaw <- preprocessRaw(rgSet)
 
-par(mfrow=c(1,2))
-densityPlot(rgSet, sampGroups=targets$Sample_Group,main="Raw", legend=FALSE)
-legend("top", legend = levels(factor(targets$Sample_Group)), 
+par(mfrow=c(2,1))
+densityPlot(mSetRaw, sampGroups=targets$Sample_Group,main="Raw", legend=FALSE)
+legend("topright", legend = levels(factor(targets$Sample_Group)), 
        text.col=brewer.pal(8,"Dark2"))
-densityPlot(getBeta(mSetSq), sampGroups=targets$Sample_Group,
+densityPlot(getBeta(mSetSq2), sampGroups=targets$Sample_Group,
             main="Normalized", legend=FALSE)
-legend("top", legend = levels(factor(targets$Sample_Group)), 
+legend("topright", legend = levels(factor(targets$Sample_Group)), 
        text.col=brewer.pal(8,"Dark2"))
 
 # functional normalization vs. quantile from Oshlack workflow
@@ -199,22 +201,22 @@ plotMDS(getM(mSetSq2), top=1000, gene.selection="common",
 ### principal component visualization to identify where largest differences lie
 
 par(mfrow = c(3,2))
-plotMDS(getM(mSetSq), top=1000, gene.selection="common", 
+plotMDS(getM(mSetSq2), top=1000, gene.selection="common", 
         col=pal[factor(targets$Sample_Group)], dim=c(1,2))
 
-plotMDS(getM(mSetSq), top=1000, gene.selection="common", 
+plotMDS(getM(mSetSq2), top=1000, gene.selection="common", 
         col=pal[factor(targets$Sample_Group)], dim=c(1,3))
 
-plotMDS(getM(mSetSq), top=1000, gene.selection="common", 
+plotMDS(getM(mSetSq2), top=1000, gene.selection="common", 
         col=pal[factor(targets$Sample_Group)], dim=c(1,4))
 
-plotMDS(getM(mSetSq), top=1000, gene.selection="common", 
+plotMDS(getM(mSetSq2), top=1000, gene.selection="common", 
         col=pal[factor(targets$Sample_Group)], dim=c(2,3))
 
-plotMDS(getM(mSetSq), top=1000, gene.selection="common", 
+plotMDS(getM(mSetSq2), top=1000, gene.selection="common", 
         col=pal[factor(targets$Sample_Group)], dim=c(2,4))
 
-plotMDS(getM(mSetSq), top=1000, gene.selection="common", 
+plotMDS(getM(mSetSq2), top=1000, gene.selection="common", 
         col=pal[factor(targets$Sample_Group)], dim=c(3,4))
 legend("topright", legend=levels(factor(targets$Sample_Group)), text.col=pal,
        cex=0.7, bg="white")
@@ -223,16 +225,67 @@ legend("topright", legend=levels(factor(targets$Sample_Group)), text.col=pal,
 ############################################
 ### filtering (using the functionally normlaized data)
 
-detP <- detP[match(featureNames(mSetSq2), rownames(detP))]
+detP <- detP[match(featureNames(mSetSq2), rownames(detP)),]
 
-# filter p-values < 0.0
+# filter p-values < 0.01
 
-keep <- rowSums(detP < 0.01) == ncol(mSetSq2) # does not work
+keep <- rowSums(detP < 0.01) == ncol(mSetSq2) 
+
+table(keep)     ### returns the amount of probes that are filtered out
+
+mSetSqFlt <- mSetSq2[keep,]
+mSetSqFlt       ### shows the remaining rows and samples
+
+### if male and female samples: filter out XYchromosomes
+
+keep <- !(featureNames(mSetSqFlt) %in% ann450k$Name[ann450k$chr %in%  c("chrX","chrY")])
 table(keep)
 
 
+### filter out SNPs
+
+mSetSqFlt <- dropLociWithSnps(mSetSqFlt)
+mSetSqFlt
+
+
+### filter out cross reactive probes from Chen et al. 2013
+xReactiveProbes <- read.csv(file=paste("Oshlack_workflow/13059_2016_1066_MOESM1_ESM.csv",
+                                       sep="/"), stringsAsFactors=FALSE)
+keep <- !(featureNames(mSetSqFlt) %in% xReactiveProbes$TargetID)
+table(keep)
+
+
+### filtering x reactive probes with maxprobes package
+### filter out probes based on Chen et al. 2013 and Benton et al . 2015 for 450k
+### and Pidsley et al. 2016 and McCartney et al. 2016 for 850k
+
+MsetExProbes <- dropXreactiveLoci(mSetSqFlt)
+
+# how many rows were removed
+nrow(mSetSqFlt) - nrow(MsetExProbes)
+
+### visualize data after filtering
+plotMDS(getM(MsetExProbes), top=1000, gne.select ="common",
+        col=pal[factor(targets$Sample_Group)], cex=0.8)
+
+##################################################
+### all filtering successfull except gender, which is not always relevant
+
+# get M- values and beta values for analysis
+
 mVals <- getM(mSetSq2)
 bVals <- getBeta(mSetSq2)
+
+
+
+
+getM(manual_filtered)
+
+mVals <- getM(MsetExProbes)
+bVals <- getBeta(MsetExProbes)
+
+colMeans(mVals)
+colMeans(bVals)
 
 par(mfrow=c(2,1))
 
