@@ -273,14 +273,6 @@ plotMDS(getM(MsetExProbes), top=1000, gne.select ="common",
 
 # get M- values and beta values for analysis
 
-mVals <- getM(mSetSq2)
-bVals <- getBeta(mSetSq2)
-
-
-
-
-getM(manual_filtered)
-
 mVals <- getM(MsetExProbes)
 bVals <- getBeta(MsetExProbes)
 
@@ -294,6 +286,13 @@ densityPlot(bVals, main = "B-values",sampGroups=targets$Sample_Group  ,pal = bre
 
 colMeans(mVals)
 colMeans(bVals)
+
+
+
+
+
+
+
 
 meth <- myImport$Meth
 unmeth <- myImport$UnMeth
