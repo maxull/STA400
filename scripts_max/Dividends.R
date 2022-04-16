@@ -19,7 +19,7 @@ row.names(AAPL$AAPL.Open)
 rownames(AAPL)
 
 AAPL_div <- getDividends("AAPL", 
-             from = "2000-01-01",
+             from = "1970-01-01",
              to = Sys.Date(), 
              src = "yahoo", 
              auto.assign = FALSE, 
@@ -69,3 +69,23 @@ MSFT2 <- as.data.table(MSFT, keep.rownames = TRUE)
 div <- AAPL2 %>% 
         select(index, AAPL.Close)
 
+
+
+
+##################################################################
+##################################################################
+
+getSymbols("AAPL")
+
+AAPL.date <- as.data.table(AAPL, keep.rownames = TRUE)
+
+AAPL_div <- as.data.table((getDividends("AAPL")), keep.rownames = TRUE)
+
+AAPL_df <- inner_join(AAPL.date, AAPL_div, by = "index")
+
+AAPL_df %>% 
+        mutate(dividend.yield = (AAPL.div/AAPL.Close)*100) -> AAPL_df
+
+getSymbols("AAPL")
+
+AAPL.date <- as.data.table(AAPL, keep.rownames = TRUE)
