@@ -1,4 +1,5 @@
 library(readxl); library(tidyr); library(tidyverse); library(ggplot2); library(dplyr); library(cowplot)
+library(grid); library(gridExtra)
 
 Results <- read_excel("data/ARA_Results.xlsx")
 
@@ -79,7 +80,7 @@ F_SL <-
 Female_SL %>% 
         ggplot(aes(Place, `ARA_total`))+
         geom_point(show.legend = FALSE)+
-        geom_smooth(method = lm, se = FALSE, show.legend = FALSE, color = "grey40", size = 1.5)+
+        geom_smooth(method = lm, se = FALSE, show.legend = FALSE, color = "darkturquoise", size = 1.5)+
         facet_grid(Discipline~Sex)+
         xlim(50,1)+
         ylab("Antall ARANorge treninger siste to sesonger")+
@@ -87,15 +88,22 @@ Female_SL %>%
         theme(panel.background = element_rect(fill = "mediumorchid1",
                                               colour = "grey40",
                                               size = 1, linetype = "solid"))+
-        theme(panel.grid.minor = element_blank())+
-        theme(axis.title.x = element_blank())+
-        theme(axis.title.y = element_blank())
+        theme(panel.grid.minor = element_blank(),
+              panel.grid.major = element_line(color = "grey70"))+
+        theme(axis.title.y = element_blank(),
+              axis.title.x = element_blank())+
+        theme(strip.background = element_rect(fill = "grey40"))+
+        theme(text = element_text(color = "black"),
+              strip.text = element_text(color = "white", size = 14),
+              axis.text = element_text(color = "black"),
+              axis.ticks = element_line(color = "white"),
+              plot.background = element_rect(fill = "grey70"))
 
 F_GS <-
 Female_GS %>% 
         ggplot(aes(Place, `ARA_total`))+
         geom_point(show.legend = FALSE)+
-        geom_smooth(method = lm, se = FALSE, show.legend = FALSE, color = "Grey40", size = 1.5)+
+        geom_smooth(method = lm, se = FALSE, show.legend = FALSE, color = "darkturquoise", size = 1.5)+
         facet_grid(Discipline~Sex)+
         coord_cartesian(xlim= c(50,0), expand = FALSE)+
         xlab("Plassering på NM 2022")+
@@ -105,15 +113,22 @@ Female_GS %>%
         theme(panel.background = element_rect(fill = "mediumorchid2",
                                               colour = "grey40",
                                               size = 1, linetype = "solid"))+
-        theme(panel.grid.minor = element_blank())+
-        theme(axis.title.x = element_blank())+
-        theme(axis.title.y = element_blank())
+        theme(panel.grid.minor = element_blank(),
+              panel.grid.major = element_line(color = "grey70"))+
+        theme(axis.title.y = element_blank(),
+              axis.title.x = element_blank())+
+        theme(strip.background = element_rect(fill = "grey40"))+
+        theme(text = element_text(color = "black"),
+              strip.text = element_text(color = "white", size = 14),
+              axis.text = element_text(color = "black"),
+              axis.ticks = element_line(color = "white"),
+              plot.background = element_rect(fill = "grey70"))
 
 F_SG <- 
 Female_SG %>% 
         ggplot(aes(Place, `ARA_total`))+
         geom_point(show.legend = FALSE)+
-        geom_smooth(method = lm, se = FALSE, show.legend = FALSE, color = "Grey40", size = 1.5)+
+        geom_smooth(method = lm, se = FALSE, show.legend = FALSE, color = "darkturquoise", size = 1.5)+
         facet_grid(Discipline~Sex)+
         coord_cartesian(xlim= c(50,0), expand = FALSE)+
         xlab("Plassering på NM 2022")+
@@ -123,8 +138,16 @@ Female_SG %>%
         theme(panel.background = element_rect(fill = "mediumorchid3",
                                               colour = "grey40",
                                               size = 1, linetype = "solid"))+
-        theme(panel.grid.minor = element_blank())+
-        theme(axis.title.y = element_blank())
+        theme(panel.grid.minor = element_blank(),
+              panel.grid.major = element_line(color = "grey70"))+
+        theme(axis.title.y = element_blank(),
+              axis.title.x = element_text(size = 14))+
+        theme(strip.background = element_rect(fill = "grey40"))+
+        theme(text = element_text(color = "black"),
+              strip.text = element_text(color = "white", size = 14),
+              axis.text = element_text(color = "black"),
+              axis.ticks = element_line(color = "white"),
+              plot.background = element_rect(fill = "grey70"))
 
 
 
@@ -151,82 +174,151 @@ M_SL <-
         Male_SL %>% 
         ggplot(aes(Place, `ARA_total`))+
         geom_point(show.legend = FALSE)+
-        geom_smooth(method = lm, se = FALSE, show.legend = FALSE, color = "grey40", size = 1.5)+
+        geom_smooth(method = lm, se = FALSE, show.legend = FALSE, color = "blue", size = 1.5)+
         facet_grid(Discipline~Sex)+
         xlim(50,1)+
-        ylab("Antall ARANorge treninger siste to sesonger")+
+        ylab(" ")+
         coord_cartesian(xlim= c(50,0), expand = FALSE)+
         theme(panel.background = element_rect(fill = "skyblue1",
                                               colour = "grey40",
                                               size = 1, linetype = "solid"))+
-        theme(panel.grid.minor = element_blank())+
-        theme(axis.title.x = element_blank())+
-        theme(axis.title.y = element_blank())
+        theme(panel.grid.minor = element_blank(),
+              panel.grid.major = element_line(color = "grey70"))+
+        theme(axis.title.y = element_blank(),
+              axis.title.x = element_blank())+
+        theme(strip.background = element_rect(fill = "grey40"))+
+        theme(text = element_text(color = "white"),
+              strip.text = element_text(color = "white", size = 14),
+              axis.text = element_text(color = "black"),
+              axis.ticks = element_line(color = "white"),
+              plot.background = element_rect(fill = "grey70"))
 
 M_GS <-
         Male_GS %>% 
         ggplot(aes(Place, `ARA_total`))+
         geom_point(show.legend = FALSE)+
-        geom_smooth(method = lm, se = FALSE, show.legend = FALSE, color = "Grey40", size = 1.5)+
+        geom_smooth(method = lm, se = FALSE, show.legend = FALSE, color = "blue", size = 1.5)+
         facet_grid(Discipline~Sex)+
         coord_cartesian(xlim= c(50,0), expand = FALSE)+
         xlab("Plassering på NM 2022")+
-        ylab("Antall ARANorge treninger siste to sesonger")+
+        ylab("Treninger med ARANorge siste to sesonger")+
         ylim(0,100)+
         theme(strip.text.x    = element_blank())+
         theme(panel.background = element_rect(fill = "skyblue2",
                                               colour = "grey40",
                                               size = 1, linetype = "solid"))+
-        theme(panel.grid.minor = element_blank())+
-        theme(axis.title.x = element_blank())+
-        theme(axis.title.y = element_blank())
+        theme(panel.grid.minor = element_blank(),
+              panel.grid.major = element_line(color = "grey70"))+
+        theme(axis.title.y = element_blank(),
+              axis.title.x = element_blank())+
+        theme(strip.background = element_rect(fill = "grey40"))+
+        theme(text = element_text(color = "white"),
+              strip.text = element_text(color = "white", size = 14),
+              axis.text = element_text(color = "black"),
+              axis.ticks = element_line(color = "white"),
+              plot.background = element_rect(fill = "grey70"))
 
 M_SG <- 
-        Male_SG %>% 
+Male_SG %>% 
         ggplot(aes(Place, `ARA_total`))+
         geom_point(show.legend = FALSE)+
-        geom_smooth(method = lm, se = FALSE, show.legend = FALSE, color = "Grey40", size = 1.5)+
+        geom_smooth(method = lm, se = FALSE, show.legend = FALSE, color = "blue", size = 1.5)+
         facet_grid(Discipline~Sex)+
         coord_cartesian(xlim= c(50,0), expand = FALSE)+
         xlab("Plassering på NM 2022")+
-        ylab("Antall ARANorge treninger siste to sesonger")+
+        ylab(" ")+
         ylim(0,100)+
         theme(strip.text.x    = element_blank())+
         theme(panel.background = element_rect(fill = "skyblue3",
                                               colour = "grey40",
                                               size = 1, linetype = "solid"))+
-        theme(panel.grid.minor = element_blank())+
-        theme(axis.title.y = element_blank())
+        theme(panel.grid.minor = element_blank(),
+              panel.grid.major = element_line(color = "grey70"))+
+        theme(axis.title.y = element_blank(),
+              axis.title.x = element_text(size = 14))+
+        theme(strip.background = element_rect(fill = "grey40"))+
+        theme(text = element_text(color = "black"),
+              strip.text = element_text(color = "white", size = 14),
+              axis.text = element_text(color = "black"),
+              axis.ticks = element_line(color = "white"),
+              plot.background = element_rect(fill = "grey70"))
 
 
 male <- plot_grid(M_SL, M_GS, M_SG, ncol = 1)
 
+y.grob <- textGrob("Treninger med ARA siste to sesonger", 
+                   gp=gpar( col="black", fontsize=14), rot=90)
 
-plot_grid(female, male, nrow = 1)
+female <- grid.arrange(arrangeGrob(female, left = y.grob))
 
-ggsave("ARA_figures/disciplines.pdf", plot = disciplines_plot, 
-       width =30,  height = 22, dpi = 600, units = "cm", device = cairo_pdf)
+
+plot <- plot_grid(female, male, nrow = 1)
+
+plot2 <- grid.arrange(arrangeGrob(plot, left = y.grob))
+
+plot2 %>% 
+        theme(plot.background = element_rect(fill = "grey70"))
+
+
+
+ggsave("ARA_figures/disciplines2.pdf", plot = plot, 
+       width =30,  height = 20, dpi = 600, units = "cm", device = cairo_pdf)
 
 
 
 
 ### plot for different ages
 
-
+age_plot_tec<-
 tec %>% 
         ggplot(aes(Place, `ARA_total`))+
         geom_point(show.legend = FALSE)+
-        geom_smooth(method = lm, se = TRUE, show.legend = FALSE)+
+        geom_smooth(method = lm, se = FALSE, show.legend = FALSE, size = 2)+
         facet_grid(~Age)+
-        xlim(50,1)+
+        coord_cartesian(xlim= c(50,0), expand = FALSE)+
         xlab("Plassering på NM 2022")+
-        ylab("Antall ARANorge treninger siste to sesonger")+
-        ylim(-25, 100)+
-        theme_bw(base_size = 16) -> age_plot_tec
+        ylab("Treninger med ARA siste to sesonger")+
+        ylim(0, 100)+
+        theme_bw(base_size = 16) + #-> age_plot_tec
+        theme(strip.background = element_rect(fill = "grey40"),
+              strip.text = element_text(color = "white"),
+              plot.background = element_rect(fill = "grey70"),
+              panel.background = element_rect(fill = "yellowgreen"),
+              panel.grid.minor = element_blank())
 
 
-ggsave("ARA_figures/age_tec.pdf", plot = age_plot_tec, 
+
+############################
+### regression analysis
+
+
+
+tec %>% 
+        filter(Sex == "Male") -> tec2
+tec %>% 
+        filter(Sex == "Female") -> tec3
+
+regression.lm <- lm(tec3$Place~tec3$`ARA_21-22`) %>% 
+        summary()
+
+
+### distribution of residuals
+
+
+regression.res <- resid(regression.lm)
+
+plot(tec3$Place, regression.res)+
+        abline(0,0)
+
+ggsave("ARA_figures/age_tec_colors.pdf", plot = age_plot_tec, 
        width =30,  height = 14, dpi = 600, units = "cm", device = cairo_pdf)
+
+
+
+
+#######################
+
+
 
 
 Results %>% 
