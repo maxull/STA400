@@ -238,6 +238,8 @@ mSetSqFlt       ### shows the remaining rows and samples
 
 ### if male and female samples: filter out XYchromosomes
 
+ann450k = getAnnotation(IlluminaHumanMethylation450kanno.ilmn12.hg19)
+
 keep <- !(featureNames(mSetSqFlt) %in% ann450k$Name[ann450k$chr %in%  c("chrX","chrY")])
 table(keep)
 
@@ -268,8 +270,6 @@ nrow(mSetSqFlt) - nrow(MsetExProbes)
 plotMDS(getM(MsetExProbes), top=1000, gne.select ="common",
         col=pal[factor(targets$Sample_Group)], cex=0.8)
 
-##################################################
-### all filtering successfull except gender, which is not always relevant
 
 # get M- values and beta values for analysis
 
@@ -287,10 +287,14 @@ densityPlot(bVals, main = "B-values",sampGroups=targets$Sample_Group  ,pal = bre
 colMeans(mVals)
 colMeans(bVals)
 
+library("mclust")
 
+fitMvals <- Mclust(bVals1000)
+summary(bVals)
 
+bVals1000 <- bVals[-c(10000:nrow(bVals)), ]
 
-
+d <- dist(bVals1000)
 
 
 
