@@ -292,9 +292,27 @@ library("mclust")
 fitMvals <- Mclust(bVals1000)
 summary(bVals)
 
+#######################################
+################################3######
+#### hierarchical cluster analysis
+
+
 bVals1000 <- bVals[-c(10000:nrow(bVals)), ]
 
 d <- dist(bVals1000)
+
+fith <- hclust(d, "ward.D2")
+
+plot(fith)
+
+rect.hclust(fith, k = 2, border = "red")
+
+clusters <- cutree(fith, 2)
+
+clusters
+
+plot(bVals1000, col = clusters)
+
 
 
 
