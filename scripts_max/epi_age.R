@@ -129,7 +129,7 @@ MsetExProbes <- dropXreactiveLoci(mSetSqFlt2)
 
 ##################################################################
 ###
-### epigenetic age
+### epigenetic age (horvath pan tissue)
 ###
 ###################################################################
 
@@ -164,3 +164,170 @@ epiage %>%
         theme_classic()
 
 
+
+
+
+
+################################################################################
+################################################################################
+################################################################################
+###
+###     MEAT 2.0 muscle tissue clock
+###
+################################################################################
+################################################################################
+################################################################################
+
+
+library(SummarizedExperiment); library(MEAT)
+
+
+
+### get bValues as data frame
+
+bVals <- read.csv("C:/Users/maxul/OneDrive/Dokumenter/Skole/Master 21-22/Master/Cancer data/Cancer data normalised B_values for clock analysis_transposed.csv")
+
+
+### if col 1 is the CpGs use code below
+
+samp <- bVals[,-1]
+rownames(samp2) <- bVals[,1]
+
+### create Summarized experiment element for the epiage_estimation 
+### as seen below it can be run with and without a pheno dataframe
+
+cancer <- SummarizedExperiment(assays = list(beta = samp),
+                               colData = pheno)                 
+
+cancer2 <- SummarizedExperiment(assays = list(beta = samp))
+
+
+### then the CpGs need to be "cleaned" so the dataset only contains the relevant 18747 CpG sites
+
+cancer_clean <- clean_beta(SE = cancer,
+                           version = "MEAT2.0")
+
+
+### then you estimate the epigenetic age with this function, where the "age_col_name" is optional, 
+###     but reqired if you wish to get difference and residuals between chronological age and predicted age
+
+
+epiage_meat <- epiage_estimation(SE = cancer_clean,
+                                 age_col_name = NULL,
+                                 version = "MEAT2.0")
+
+### get only the age estimations
+
+
+DNAmage <- as.data.frame(epiage_meat$DNAmage)
+
+### add to earlyer created participant data with horvath clock estimations
+
+
+
+epiage <- cbind(epiage, DNAmage)
+
+
+epiage_data <- epiage %>% 
+        select(1,2,3,6,7,8,9,10)
+
+write.csv(epiage_data, "C:/Users/maxul/OneDrive/Dokumenter/Skole/Master 21-22/Master/Cancer data/cancer_epiage.csv",
+          row.names = FALSE)
+
+
+
+
+
+
+
+
+
+
+###########################
+####
+#### cancer data
+
+
+bVals <- read.csv("C:/Users/maxul/OneDrive/Dokumenter/Skole/Master 21-22/Master/Cancer data/Cancer data normalised B_values for clock analysis_transposed.csv")
+
+
+
+samp2 <- bVals[,-1]
+rownames(samp2) <- bVals[,1]
+
+
+epiage_horvath <- agep(samp2, coeff=NULL, method="horvath")
+
+### read participant data
+
+library(readxl);library(tibble)
+df <- tibble::rownames_to_column(epiage_horvath, "ID")
+
+participants <- read_xlsx("C:/Users/maxul/OneDrive/Dokumenter/Skole/Master 21-22/Master/Cancer data/array no & conditions.xlsx")
+
+epiage <- cbind(df, participants)
+
+epiage <- epiage %>% 
+        select(c(1,2,3,5,6,7))
+
+epiage<- epiage %>% 
+        mutate(DNAmage = `epiage_meat$DNAmage`+20,
+               Timepoint = factor(TIMEPOINT, levels = c("Pre", "Post")),
+               Condition = factor(CONDITION, levels = c("Healthy Aged-matched Trained", "Cancer Untrained", "Cancer Trained")))
+        ### added +20 years to DNAmage estimate because horvath clock also does that to esimate "chronological" age
+
+levels(epiage$Timepoint) <- c("Pre", "Post")
+levels(epiage$Timepoint)
+       
+               
+epiage %>% 
+        ggplot(aes(x = Condition, y = DNAmage, fill = Timepoint))+
+        geom_boxplot()+
+        theme_classic()
+        
+
+
+############################3
+###
+### running MEAT 2.0 on the same data
+
+
+BiocManager::install("SummarizedExperiment")
+
+library(SummarizedExperiment); library(MEAT)
+
+pheno <- read_xlsx("C:/Users/maxul/OneDrive/Dokumenter/Skole/Master 21-22/Master/Cancer data/Phenotypes.xlsx")
+
+cancer <- SummarizedExperiment(assays = list(beta = samp2),
+                               colData = pheno)
+
+cancer2 <- SummarizedExperiment(assays = list(beta = samp2))
+
+
+cancer_clean <- clean_beta(SE = cancer,
+                                 version = "MEAT2.0")
+
+cancer2_clean <- clean_beta(SE = cancer2,
+                           version = "MEAT2.0")
+
+cancer_clean_with_gold_mean <- cbind(assays(cancer_clean)$beta,
+                                           gold.mean.MEAT2.0$gold.mean)
+
+epiage_meat <- epiage_estimation(SE = cancer_clean,
+                                 age_col_name = NULL,
+                                 version = "MEAT2.0")
+
+epiage_meat <- epiage_estimation(SE = cancer2_clean,
+                                 age_col_name = NULL,
+                                 version = "MEAT2.0")
+
+DNAmage <- as.data.frame(epiage_meat$DNAmage)
+
+epiage <- cbind(epiage, DNAmage)
+
+
+epiage_data <- epiage %>% 
+        select(1,2,3,6,7,8,9,10)
+
+write.csv(epiage_data, "C:/Users/maxul/OneDrive/Dokumenter/Skole/Master 21-22/Master/Cancer data/cancer_epiage.csv",
+          row.names = FALSE)
