@@ -46,6 +46,8 @@ testDir=system.file("extdata", package = "ChAMPdata")
 myLoad <- champ.load(testDir,arraytype = "450k")
 myLoad2 <- champ.load(testDir, arraytype = "450K", method = "minfi")
 
+pd <- as.data.frame(myLoad$pd)
+
 ### show warnings
 
 warnings()

@@ -207,12 +207,18 @@ cancer2 <- SummarizedExperiment(assays = list(beta = samp))
 cancer_clean <- clean_beta(SE = cancer,
                            version = "MEAT2.0")
 
+### calibrate beta values 
+
+
+
+cancer_clean_calibrated <- BMIQcalibration(cancer_clean)
+
 
 ### then you estimate the epigenetic age with this function, where the "age_col_name" is optional, 
 ###     but reqired if you wish to get difference and residuals between chronological age and predicted age
 
 
-epiage_meat <- epiage_estimation(SE = cancer_clean,
+epiage_meat <- epiage_estimation(SE = cancer_clean_calibrated,
                                  age_col_name = NULL,
                                  version = "MEAT2.0")
 
