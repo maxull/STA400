@@ -318,4 +318,6 @@ library(tidyquant); library(tidyverse)
 tq_index_options()
 
 
+getSymbols("0P00000MVB.IR", src = "yahoo")
+
 
