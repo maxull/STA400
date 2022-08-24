@@ -95,6 +95,8 @@ epiage_meat <- epiage_estimation(SE = calibrated,
 
 DNAmage <- as.data.frame(epiage_meat$DNAmage)
 
+DNAmage$`epiage_meat$DNAmage`= DNAmage$`epiage_meat$DNAmage`+20
+
 epiage <- cbind(epiage, DNAmage)
 
 
@@ -110,9 +112,45 @@ epiage<- epiage %>%
 ### boxplot of epiage estimations
 
 epiage %>% 
-        ggplot(aes(x = Condition, y = DNAmage, fill = Timepoint))+
-        geom_boxplot()+
-        theme_classic()
+        ggplot(aes(x = Condition, y = DNAmage, fill = Timepoint, color = Timepoint))+
+        geom_boxplot(fatten = 1,lwd = 1.5)+
+        theme_classic()+
+        scale_fill_manual(values=c("#97aad2", "#daceb8"))+
+        scale_color_manual(values=c("#041334", "#6d5b37"))+
+        theme(legend.key.size = unit(1, 'cm'),
+              legend.key.height = unit(1, 'cm'),
+              legend.key.width = unit(1, 'cm'))+
+        theme(axis.title.x  = element_blank(),
+              axis.text.x = element_text(size = 14, face = "bold"),
+              axis.title.y = element_text(size = 18,face = "bold"))+
+        ylab("DNAm Age")
+
+# create legends for manual copying
+epiage %>% 
+        ggplot(aes(x = DNAmage, fill = Timepoint, color = Timepoint))+
+        geom_histogram(size = 1.15)+
+        theme_classic()+
+        scale_fill_manual(values=c("#97aad2", "#daceb8"))+
+        scale_color_manual(values=c("#041334", "#6d5b37"))+
+        theme(legend.key.size = unit(5, 'cm'),
+              legend.key.height = unit(0.7, 'cm'),
+              legend.key.width = unit(0.7, 'cm'))
+
+        
+
+# colors
+
+# fill pre = #97aad2
+# border pre = #041334
+# fill post = #daceb8
+# border post = #6d5b37
+
+
+
+########################################
+##########################################3
+#######################################
+
 
 ### clean dataset and save
 
