@@ -123,7 +123,8 @@ epiage %>%
         theme(axis.title.x  = element_blank(),
               axis.text.x = element_text(size = 14, face = "bold"),
               axis.title.y = element_text(size = 18,face = "bold"))+
-        ylab("DNAm Age")
+        ylab("DNAm Age")+
+        ylim(47,70)
 
 # create legends for manual copying
 epiage %>% 
