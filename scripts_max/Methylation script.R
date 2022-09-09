@@ -269,7 +269,7 @@ MsetExProbes <- dropXreactiveLoci(mSetSqFlt)
 nrow(mSetSqFlt) - nrow(MsetExProbes)
 
 ### visualize data after filtering
-plotMDS(getM(MsetExProbes), top=1000, gne.select ="common",
+plotMDS(getM(MsetExProbes), top=100, gne.select ="common",
         col=pal[factor(targets$Sample_Group)], cex=0.8)
 
 

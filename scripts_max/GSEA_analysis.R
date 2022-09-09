@@ -28,7 +28,7 @@ install.packages("ggplot2")
 
 
 library(wateRmelon); library(methylumi);library(FDb.InfiniumMethylation.hg19);library(minfi); library(maxprobes); library(tidyverse);library(ggplot2)
-
+library(tidyverse)
 
 
 ######################################
@@ -195,7 +195,7 @@ positions <- c("shelf","island","shore","opensea")     #### change this order ba
 
 numb2 <- df2 %>%
         group_by(cgi,direction) %>%
-        summarise(count=n()) 
+        summarise(count="n()")
 
 a = numb2[3,3]
 b = numb2[4,3]

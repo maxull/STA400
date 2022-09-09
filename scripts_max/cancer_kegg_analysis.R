@@ -249,4 +249,4 @@ keggresids = substr(keggrespathways, start = 1, stop = 8)
 keggresids
 
 tmp = sapply(keggresids, function(pid) pathview(gene.data = foldchange, pathway.id = pid, species = "hsa"))
-
+#

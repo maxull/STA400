@@ -11,7 +11,7 @@ library(wateRmelon); library(methylumi);library(FDb.InfiniumMethylation.hg19);li
 ###
 ### fetching data 
 ###
-### had to manually create the CSV file sinze there was no correct format csv file in the untared folder
+### had to manually create the CSV file since there was no correct format csv file in the untared folder
 
 
 list <- as.data.frame(list.files(my_dir))
