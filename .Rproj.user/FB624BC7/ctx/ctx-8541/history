@@ -1,0 +1,512 @@
+statistic = c(Steps_daily) ~"{mean} ({sd})",
+digits = ~ 2) %>%
+add_p(Steps_daily~"t.test", test.args = Steps_daily~list(var.equal = TRUE)) %>%
+add_ci()
+tbl_merge(list(tbl1,tbl2))
+library(foreign); library(tidyverse); library(psych);library(readxl);library(gtsummary); library(gmodels)
+##############################################################
+#########################################################################
+### 2.1 b)
+library(car) #levines test
+data13 %>%
+ggplot(aes(Steps_daily, fill = ASTMA))+
+geom_density()+
+facet_wrap(~ASTMA)
+#################################################################################
+#############################################################################
+### 2.2 t-test for independent groups
+data13 <- read.spss("data/Datasett 13 FYSAK (2).sav", to.data.frame = TRUE)
+data13 %>%
+ggplot(aes(Stillesitting, fill = ASTMA))+
+geom_density()+
+facet_wrap(~ASTMA)
+data13 %>%
+ggplot(aes(Stillesitting))+
+geom_density()+
+facet_wrap(~ASTMA)
+data13 %>%
+ggplot(aes(Stillesitting))+
+geom_histogram()+
+facet_wrap(~ASTMA)
+data13 %>%
+ggplot(aes(Stillesitting, fill = ASTMA))+
+geom_histogram()+
+facet_wrap(~ASTMA)
+data13 %>%
+ggplot(aes(Stillesitting, fill = ASTMA))+
+geom_density()+
+facet_wrap(~ASTMA)
+data13 %>%
+ggplot(aes(sample=Stillesitting, fill = ASTMA))+
+geom_qq()+
+geom_qq_line()+
+facet_wrap(~ASTMA)
+data13 %>%
+select(Stillesitting, ASTMA) %>%
+ggplot(aes(Stillesitting, fill = ASTMA))+
+geom_density()+
+facet_wrap(~ASTMA)
+data13 %>%
+drop_na(ASTMA) %>%
+ggplot(aes(Stillesitting, fill = ASTMA))+
+geom_density()+
+facet_wrap(~ASTMA)
+View(data13)
+data13 %>%
+ggplot(aes(Stillesitting, fill = ASTMA))+
+geom_density()+
+facet_wrap(~ASTMA)
+describeBy(data13$Stillesitting, group = data13$ASTMA)
+describeBy(data13$Stillesitting, group = data13$KREFT)
+data13 %>%
+ggplot(aes(Stillesitting, fill = KREFT))+
+geom_density()+
+facet_wrap(~KREFT)
+data13 %>%
+ggplot(aes(sample=Stillesitting, fill = KREFT))+
+geom_qq()+
+geom_qq_line()+
+facet_wrap(~ASTMA)
+data13 %>%
+ggplot(aes(sample=Stillesitting, fill = KREFT))+
+geom_qq()+
+geom_qq_line()+
+facet_wrap(~KREFT)
+ks.test(data13$ASTMA, data13na$Stillesitting)
+ks.test(data13$ASTMA, data13$Stillesitting)
+ks.test(data13$KREFT, data13$Stillesitting)
+leveneTest(Stillesitting~ASTMA, data = data13, center= mean)    #non-significant p value -> equal variance
+leveneTest(Stillesitting_daily~KREFT, data = data13, center= mean)    #non-significant p value -> equal variance
+leveneTest(Stillesitting~KREFT, data = data13, center= mean)    #non-significant p value -> equal variance
+leveneTest(data13$Stillesitting~data13$ASTMA, center = mean
+leveneTest(data13$Stillesitting~data13$ASTMA, center = mean)
+leveneTest(Stillesitting~ASTMA, data = data13, center= mean)    #non-significant p value -> equal variance
+leveneTest(Stillesitting~KREFT, data = data13, center= mean)    #non-significant p value -> equal variance
+leveneTest(data13$Stillesitting~data13$ASTMA, center = mean)
+t.test(data13na$Stillesitting~data13na$ASTMA, var.equal=TRUE)
+t.test(data13$Stillesitting~data13na$ASTMA, var.equal=TRUE)
+t.test(data13$Stillesitting~data13$ASTMA, var.equal=TRUE)
+t.test(data13$Stillesitting~data13$KREFT, var.equal=TRUE)
+t.test(data13$Stillesitting~data13$ASTMA, var.equal=TRUE)
+t.test(data13$Stillesitting~data13$KREFT, var.equal=TRUE)
+tbl1 <- data13 %>%
+select(ASTMA,Stillesitting) %>%
+tbl_summary(by = ASTMA,
+statistic = c(Steps_daily) ~"{mean} ({sd})",
+digits = ~ 2) %>%
+add_p(Steps_daily~"t.test", test.args = Steps_daily~list(var.equal = TRUE)) %>%
+add_ci()
+tbl1 <- data13 %>%
+select(ASTMA,Stillesitting) %>%
+tbl_summary(by = ASTMA,
+statistic = c(Stillesitting) ~"{mean} ({sd})",
+digits = ~ 2) %>%
+add_p(Stillesitting~"t.test", test.args = Stillesitting~list(var.equal = TRUE)) %>%
+add_ci()
+tbl2 <- data13 %>%
+select(KREFT,Stillesitting) %>%
+tbl_summary(by = KREFT,
+statistic = c(Stillesitting) ~"{mean} ({sd})",
+digits = ~ 2) %>%
+add_p(Stillesitting~"t.test", test.args = Stillesitting~list(var.equal = TRUE)) %>%
+add_ci()
+tbl_merge(list(tbl1,tbl2))
+tbl_merge(list(tbl1,tbl2),
+tab_spanner = c("ASTMA", "CANCER"))
+library(foreign); library(tidyverse); library(psych);library(readxl);library(gtsummary); library(gmodels)
+dxa <- read_excel("data/max_dxa.xlsx")
+View(dxa)
+dxa2 <- read_xlsx("data/max_dxa.xlsx")
+View(dxa2)
+View(dxa2)
+View(dxa2)
+dxa <- read_excel("data/max_dxa.xlsx")
+View(dxa)
+dxa %>%
+select(Område == "Kropp")
+dxa <- read_excel("data/max_dxa.xlsx")
+dxa %>%
+select(Area == "Kropp")
+dxa %>%
+select(Area== "Kropp")
+dxa %>%
+select("Area"== "Kropp")
+dxa %>%
+summary()
+dxa %>%
+ggplot(aes(Area== "Kropp", fill= Date))+
+geom_bar()
+dxa %>%
+ggplot(aes(Area== "Kropp", `Tissue(%fat)`, fill= Date))+
+geom_bar()
+dxa %>%
+ggplot(aes(Area== "Kropp", `Tissue(%fat)`, fill= Date))+
+geom_boxplot()
+dxa %>%
+ggplot(aes(Area== "Kropp", `Tissue(%fat)`))+
+geom_boxplot()
+dxa %>%
+ggplot(aes(Area== "Kropp", `Tissue(%fat)`, group = Date))+
+geom_boxplot()
+dxa %>%
+select(Area == "Kropp") #%>%
+dxa %>%
+filter(Area=="Kropp")
+dxa %>%
+filter(Area=="Kropp") %>%
+ggplot(aes(`Tissue(%fat)`, group = Date))+
+geom_boxplot()
+dxa %>%
+filter(Area=="Kropp") %>%
+ggplot(aes(`Tissue(%fat)`, group = Date))+
+geom_point()
+dxa %>%
+filter(Area=="Kropp") %>%
+ggplot(aes(`Tissue(%fat)`, Date, group = Date))+
+geom_point()
+dxa %>%
+filter(Area=="Kropp") %>%
+ggplot(aes(`Tissue(%fat)`, Date))+
+geom_point()
+dxa %>%
+filter(Area=="Kropp") %>%
+ggplot(aes(Date, `Tissue(%fat)`))+
+geom_point()
+dxa <- read_excel("data/max_dxa.xlsx")
+dxa %>%
+summary()
+dxa %>%
+filter(Area=="Total") %>%
+ggplot(aes(Date, `Tissue(%fat)`))+
+geom_point()
+dxa %>%
+filter(Area=="Total") %>%
+ggplot(aes(Date, `Tissue(%fat)`))+
+geom_point()+
+geom_line()
+dxa %>%
+filter(Area=="Total") %>%
+ggplot(aes(Date, `Tissue(%fat)`))+
+geom_point()+
+geom_line(lm)
+dxa %>%
+filter(Area=="Total") %>%
+ggplot(aes(Date, `Tissue(%fat)`))+
+geom_point()+
+geom_curve()
+dxa %>%
+filter(Area=="Total") %>%
+ggplot(aes(Date, `Tissue(%fat)`))+
+geom_point()+
+geom_abline()
+dxa %>%
+filter(Area=="Total") %>%
+ggplot(aes(Date, `lean(g)`))+
+geom_point()
+dxa %>%
+filter(Area=="Total") %>%
+ggplot(aes(Date, `lean(g)`/100))+
+geom_point()
+dxa %>%
+filter(Area=="Total") %>%
+ggplot(aes(Date, `lean(g)`/1000))+
+geom_point()
+dxa %>%
+filter(Area=="Total") %>%
+ggplot(aes(Date, `lean(g)`/1000))+
+geom_point()+
+labels(y="lean mass in KG")
+dxa %>%
+filter(Area=="Total") %>%
+ggplot(aes(Date, `lean(g)`/1000))+
+geom_point()+
+labs(y="lean mass in KG")
+dxa %>%
+filter(Area=="Total") %>%
+ggplot(aes(Date, `lean(g)`/1000))+
+geom_point()+
+labs(y="lean mass in KG")+
+theme_bw()
+dxa %>%
+filter(Area=="Total") %>%
+ggplot(aes(Date, `lean(g)`/1000))+
+geom_point()+
+labs(y="lean mass in KG",
+x = "")+
+theme_bw()
+dxa %>%
+filter(Area == c("Leg Right", "Leg Left""))
+dxa %>%
+filter(Area == c("Leg Right", "Leg Left")) %>%
+ggplot(aes(Date,`lean(g)`, fill = Area))+
+geom_bar()
+dxa %>%
+filter(Area == c("Leg Right", "Leg Left")) %>%
+ggplot(aes(Date,`lean(g)`, fill = Area))+
+geom_point()
+dxa %>%
+filter(Area == c("Leg Right", "Leg Left")) %>%
+ggplot(aes(Date,`lean(g)`))+
+geom_point()
+dxa %>%
+filter(Area == c("Leg Right", "Leg Left")) %>%
+print()
+dxa %>%
+filter(Area == "Left Leg", Area == "Right Leg") %>%
+print()
+dxa %>%
+selelct(Area == "Left Leg", Area == "Right Leg") %>%
+print()
+dxa %>%
+select(Area == "Left Leg", Area == "Right Leg") %>%
+print()
+dxa <- read_excel("data/max_dxa.xlsx")
+ggplot(aes(Date, `Tissue_%fat`)+
+ggplot(aes(Date, `Tissue_%fat`)+
+geom_point()
+View(dxa)
+View(dxa)
+ggplot(aes(Date, Tissue_%fat)+
+dxa %>%
+select(Area== "Total")
+dplyr::select(Area=="Total") %>%
+geom_point()
+dxa %>%
+summary()
+filter(Area=="Total") %>%
+geom_point()
+View(dxa)
+library(tidyverse);library(readxl);library(gtsummary); library(gmodels)
+dxa <- read_excel("data/max_dxa.xlsx")
+dxa %>%
+summary()
+dxa %>%
+library(foreign); library(tidyverse); library(psych);library(readxl);library(gtsummary); library(gmodels)
+read_excel("data/Book1.xlsx")
+tabel2 <- read_excel("data/Book1.xlsx")
+tbl1 <- tabel2 %>%
+tbl_summary()
+View(tbl1)
+data13 %>%
+select(ASTMA,Stillesitting) %>%
+tbl_summary(by = ASTMA,
+statistic = c(Stillesitting) ~"{mean} ({sd})",
+digits = ~ 2) %>%
+add_p(Stillesitting~"t.test", test.args = Stillesitting~list(var.equal = TRUE)) %>%
+add_ci()
+tabel2 %>%
+tbl_summary()
+View(tabel2)
+tabel2 %>%
+mutate(diff = "Milk"-"NateiveWhey")
+tabel2 %>%
+mutate(diff = Milk-NateiveWhey)
+tabel2 %>%
+mutate(diff = Milk-NativeWhey)
+tabel2 %>%
+mutate(diff = Milk-NativeWhey) %>%
+tbl_summary()
+tabel2 <- read_excel("data/Book1.xlsx")
+View(tabel2)
+tabel2 %>%
+tbl_summary(by = Group)
+tabel2 <- read_excel("data/Book1.xlsx, col_names = TRUE)
+tabel2 %>%
+tbl_summary(by = Group)
+data13 %>%
+select(ASTMA,Stillesitting) %>%
+tbl_summary(by = ASTMA,
+statistic = c(Stillesitting) ~"{mean} ({sd})",
+digits = ~ 2) %>%
+add_p(Stillesitting~"t.test", test.args = Stillesitting~list(var.equal = TRUE)) %>%
+add_ci()
+tabel2 <- read_excel("data/Book1.xlsx, col_names = TRUE)
+tabel2 %>%
+tbl_summary(by = Group)
+data13 %>%
+select(ASTMA,Stillesitting) %>%
+tbl_summary(by = ASTMA,
+statistic = c(Stillesitting) ~"{mean} ({sd})",
+digits = ~ 2) %>%
+add_p(Stillesitting~"t.test", test.args = Stillesitting~list(var.equal = TRUE)) %>%
+add_ci()
+tabel2 <- read_excel("data/Book1.xlsx, col_names = TRUE)
+tabel2 %>%
+tbl_summary(by = Group)
+data13 %>%
+select(ASTMA,Stillesitting) %>%
+tbl_summary(by = ASTMA,
+statistic = c(Stillesitting) ~"{mean} ({sd})",
+digits = ~ 2) %>%
+add_p(Stillesitting~"t.test", test.args = Stillesitting~list(var.equal = TRUE)) %>%
+add_ci()
+View(tabel2)
+tabel2 <- read_excel("data/Book1.xlsx, col_names = TRUE)
+tabel2 %>%
+tbl_summary(by = Group)
+data13 %>%
+select(ASTMA,Stillesitting) %>%
+tbl_summary(by = ASTMA,
+statistic = c(Stillesitting) ~"{mean} ({sd})",
+digits = ~ 2) %>%
+add_p(Stillesitting~"t.test", test.args = Stillesitting~list(var.equal = TRUE)) %>%
+add_ci()
+library(foreign); library(tidyverse); library(psych);library(readxl);library(gtsummary); library(gmodels)
+tabel2 <- read_excel("data/Book1.xlsx, col_names = TRUE)
+tabel2 <- read_excel("data/Book1.xlsx, col_names = TRUE) %>%
+print()
+tabel2 %>%
+tbl_summary(by = Group)
+#data13 %>%
+select(ASTMA,Stillesitting) %>%
+tbl_summary(by = ASTMA,
+statistic = c(Stillesitting) ~"{mean} ({sd})",
+digits = ~ 2) %>%
+add_p(Stillesitting~"t.test", test.args = Stillesitting~list(var.equal = TRUE)) %>%
+add_ci()
+tabel2 <- read_excel("data/Book1.xlsx", col_names = TRUE) %>%
+print()
+tabel2 <- read_excel("data/Book1.xlsx") %>%
+print()
+()
+()
+tabel2 <- read_excel("data/Book1.xlsx", col_names = TRUE) %>%
+print()
+tabel2 %>%
+tbl_summary(by = Group)
+tabel2 %>%
+tbl_summary(by = Group) %>%
+add_difference()
+add_difference()
+tabel2 %>%
+tbl_summary(by = Group,
+statistic = c(g) ~"{mean}",
+digits = ~ 2)
+tabel2 %>%
+tbl_summary(by = Group,
+statistic = c(g) ~"{g}",
+digits = ~ 2)
+tabel2 %>%
+tbl_summary(by = Group,
+statistic = c(g) ~"{mean}",
+digits = ~ 2)
+tabel2 <- read_excel("data/Book1.xlsx", col_names = TRUE) %>%
+print()
+add_difference()
+tabel2 %>%
+tbl_summary(by = Group,
+statistic = c(g) ~"{mean}",
+digits = ~ 2)
+tabel2 <- read_excel("data/Book1.xlsx", col_names = TRUE) %>%
+mutate(g= as_factor(g))
+tabel2 <- read_excel("data/Book1.xlsx", col_names = TRUE) %>%
+mutate(g= as_factor(g)) %>%
+print()
+add_difference()
+tabel2 %>%
+tbl_summary(by = Group,
+statistic = c(g) ~"{mean}",
+digits = ~ 2)
+library(foreign); library(tidyverse); library(psych);library(readxl);library(gtsummary); library(gmodels)
+tabel2 <- read_excel("data/Book1.xlsx, col_names = TRUE) %>%
+print()
+tabel2 %>%
+tbl_summary(by = Group)
+#data13 %>%
+select(ASTMA,Stillesitting) %>%
+tbl_summary(by = ASTMA,
+statistic = c(Stillesitting) ~"{mean} ({sd})",
+digits = ~ 2) %>%
+add_p(Stillesitting~"t.test", test.args = Stillesitting~list(var.equal = TRUE)) %>%
+add_ci()
+tabel2 <- read_excel("data/Book1.xlsx, col_names = TRUE) %>%
+print()
+tabel2 %>%
+tbl_summary(by = Group)
+#data13 %>%
+select(ASTMA,Stillesitting) %>%
+tbl_summary(by = ASTMA,
+statistic = c(Stillesitting) ~"{mean} ({sd})",
+digits = ~ 2) %>%
+add_p(Stillesitting~"t.test", test.args = Stillesitting~list(var.equal = TRUE)) %>%
+add_ci()
+tabel2 <- read_excel("data/Book1.xlsx", col_names = TRUE) %>%
+print()
+tabel2 %>%
+tbl_summary(by = Group)
+if (!require("BiocManager", quietly = TRUE))
+install.packages("BiocManager")
+BiocManager::install("minfi")
+library(tidyverse);library(readxl);library(gtsummary); library(gmodels)
+library(tidyverse);library(readxl);library(gtsummary); library(gmodels)
+dxa <- read_excel("data/max_dxa.xlsx")
+dxa %>%
+summary()
+dxa %>%
+ggplot(aes(Date, Tissue_%fat)+
+library(tidyverse);library(readxl);library(gtsummary); library(gmodels)
+dxa %>%
+summary()
+dxa %>%
+ggplot(aes(Date, Tissue_%fat)+
+View(dxa)
+ggplot(aes(Date, Tissue%fat)+
+geom_point()
+dxa %>%
+(Area== "Total")
+dxa %>%
+summary(
+dxa %>%
+summary()
+dxa %>%
+ggplot(aes(Date, Tissue%fat)+
+dxa %>%
+(Area== "Total")
+dxa %>%
+filter(Area=="Total") %>%
+ggplot(aes(Date, `lean(g)`/1000))+
+geom_point()+
+labs(y="lean mass in KG",
+x = "")+
+theme_bw()
+dxa %>%
+filter(Area == "Left Leg", Area == "Right") %>%
+print()
+ggplot(aes(Date,`lean(g)`))+
+geom_point()
+if (!require("BiocManager", quietly = TRUE))
+install.packages("BiocManager")
+BiocManager::install("ChAMP")
+library("ChAMP")
+BiocManager::install(c("minfi","ChAMPdata","Illumina450ProbeVariants.db","sva","IlluminaHumanMethylation450kmanifest","limma","RPMM","DNAcopy","preprocessCore","impute","marray","wateRmelon","goseq","plyr","GenomicRanges","RefFreeEWAS","qvalue","isva","doParallel","bumphunter","quadprog","shiny","shinythemes","plotly","RColorBrewer","DMRcate","dendextend","IlluminaHumanMethylationEPICmanifest","FEM","matrixStats","missMethyl","combinat"))
+if (!require("BiocManager", quietly = TRUE))
+install.packages("BiocManager")
+BiocManager::install("ChAMP")
+BiocManager::install("YourErrorPackage")
+BiocManager::install("ChAMP")
+myLoad <- Champ.load("data/GSM4948519.txt", arraytype = "EPIC")
+myLoad <- ChAMP::Champ.load("data/GSM4948519.txt", arraytype = "EPIC")
+BiocManager::install(c("minfi","ChAMPdata","Illumina450ProbeVariants.db",
+"sva","IlluminaHumanMethylation450kmanifest","limma",
+"RPMM","DNAcopy","preprocessCore","impute","marray",
+"wateRmelon","goseq","plyr","GenomicRanges","RefFreeEWAS",
+"qvalue","isva","doParallel","bumphunter","quadprog","shiny",
+"shinythemes","plotly","RColorBrewer","DMRcate","dendextend",
+"IlluminaHumanMethylationEPICmanifest","FEM","matrixStats","missMethyl","combinat"))
+BiocManager::install(c("minfi","ChAMPdata","Illumina450ProbeVariants.db",
+"sva","IlluminaHumanMethylation450kmanifest","limma",
+"RPMM","DNAcopy","preprocessCore","impute","marray",
+"wateRmelon","goseq","plyr","GenomicRanges","RefFreeEWAS",
+"qvalue","isva","doParallel","bumphunter","quadprog","shiny",
+"shinythemes","plotly","RColorBrewer","DMRcate","dendextend",
+"IlluminaHumanMethylationEPICmanifest","FEM","matrixStats","missMethyl","combinat", force = "TRUE"))
+BiocManager::install("ChAMP", force = "TRUE")
+BiocManager::install("ChAMP", "force = "TRUE"")
+BiocManager::install("ChAMP", force = TRUE)
+BiocManager::install("locfit")
+BiocManager::install("minfi")
+BiocManager::install("DMRcate")
+myLoad <- ChAMP::Champ.load("data/GSM4948519.txt", arraytype = "EPIC")
+install.packages("installr")
+library(installr)
+updateR()

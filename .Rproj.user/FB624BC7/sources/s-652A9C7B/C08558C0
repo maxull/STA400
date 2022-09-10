@@ -1,0 +1,26 @@
+{
+    "id": "C08558C0",
+    "path": "~/Coding/STA400/STA400/scripts_max/GSEA_analysis.R",
+    "project_path": "scripts_max/GSEA_analysis.R",
+    "type": "r_source",
+    "hash": "4170540274",
+    "contents": "",
+    "dirty": false,
+    "created": 1653400775181.0,
+    "source_on_save": false,
+    "relative_order": 7,
+    "properties": {
+        "source_window_id": "",
+        "Source": "Source",
+        "cursorPosition": "306,0",
+        "scrollLine": "273"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1662733796,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1662733796213,
+    "read_only": false,
+    "read_only_alternatives": []
+}
