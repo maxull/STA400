@@ -74,6 +74,7 @@ cancer2_clean <- clean_beta(SE = cancer2,
                             version = "MEAT2.0")
 
 
+
 ### BMIQ calibration 
 
 
@@ -434,3 +435,12 @@ diff_summary <- group_by(epiage_data, Condition) %>%
         summarise(mean=mean(diff), sd=sd(diff)) %>%
         arrange(desc(mean))
 print(data_summary)
+
+
+
+
+
+                
+                
+                
+        
